@@ -8,7 +8,11 @@ Dashboard React/Vite yang membaca data live dari Google Apps Script API. Struktu
 - **Overall Ranking** di dashboard utama diganti menjadi **Bot Automation Success vs Failed** berbentuk donut berdasarkan `LOG BOT`.
 - **Monthly Brand Ranking History** menggunakan `DATA SUMMARY DAILY`, dengan DEPO chart ke atas dan WD chart ke bawah, plus label brand.
 - **Daily Tracker** otomatis menyembunyikan kolom yang seluruh datanya kosong dan mempunyai filter Bulan + Brand serta pagination 25 / 50 / 100 dengan nomor halaman.
+<<<<<<< HEAD
 - **Bot Automation** tersedia sebagai menu khusus untuk monitoring `LOG BOT`, sekaligus tetap mempertahankan ringkasan Success vs Failed pada dashboard utama.
+=======
+- **Bot Automation** dihapus dari halaman reconciliation karena sudah ada di dashboard utama.
+>>>>>>> b48c8946a473829eb03098d58d72ec3c720cea5a
 - **Mutasi Antar Rekening WD** menggantikan nama Reconciliation WD, dengan filter tanggal transaksi, filter status, pencarian, warna nominal debit merah, serta pagination 25 / 50 / 100.
 - Tabel **Reconciliation Depo & Mutasi Depo** dihapus dari menu reconciliation.
 
@@ -34,7 +38,11 @@ Default API ada di `src/config.js`. Jika ingin mengganti API tanpa mengubah sour
 VITE_FINANCE_API_URL=https://script.google.com/macros/s/YOUR_DEPLOYMENT_ID/exec
 ```
 
+<<<<<<< HEAD
 Dashboard melakukan refresh otomatis setiap 5 menit dan tetap memiliki tombol refresh manual. Menu Bot Automation memakai data `botLog` dari payload API yang sama, dengan filter DEPO/WD, status, pencarian, Failure Source, dan pagination 50 baris per halaman.
+=======
+Dashboard melakukan refresh otomatis setiap 5 menit dan tetap memiliki tombol refresh manual.
+>>>>>>> b48c8946a473829eb03098d58d72ec3c720cea5a
 
 ## Deploy agar bisa dibuka melalui web
 Project ini sudah berbasis Vite sehingga siap dideploy ke **Vercel, Netlify, atau GitHub Pages**. Untuk Vercel/Netlify cukup upload repository/project ini dan gunakan:

@@ -1,7 +1,12 @@
+<<<<<<< HEAD
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { FINANCE_API_URL, REFRESH_MS, RETRY_DELAYS_MS } from "../config";
 
 const CACHE_KEY = "reconciliation_control_center_last_good_data_v1";
+=======
+import { useCallback, useEffect, useMemo, useState } from "react";
+import { FINANCE_API_URL, REFRESH_MS } from "../config";
+>>>>>>> b48c8946a473829eb03098d58d72ec3c720cea5a
 
 const num = (value) => {
   if (typeof value === "number") return Number.isFinite(value) ? value : 0;
@@ -73,12 +78,18 @@ function loadJsonp(url) {
   return new Promise((resolve, reject) => {
     const callbackName = `financeApiCallback_${Date.now()}_${Math.random().toString(36).slice(2)}`;
     const script = document.createElement("script");
+<<<<<<< HEAD
     let settled = false;
     const timeout = window.setTimeout(() => {
       if (settled) return;
       settled = true;
       cleanup();
       reject(new Error("API timeout (30 detik)"));
+=======
+    const timeout = window.setTimeout(() => {
+      cleanup();
+      reject(new Error("API timeout"));
+>>>>>>> b48c8946a473829eb03098d58d72ec3c720cea5a
     }, 30000);
     const cleanup = () => {
       window.clearTimeout(timeout);
@@ -86,14 +97,20 @@ function loadJsonp(url) {
       script.remove();
     };
     window[callbackName] = (data) => {
+<<<<<<< HEAD
       if (settled) return;
       settled = true;
+=======
+>>>>>>> b48c8946a473829eb03098d58d72ec3c720cea5a
       cleanup();
       resolve(data);
     };
     script.onerror = () => {
+<<<<<<< HEAD
       if (settled) return;
       settled = true;
+=======
+>>>>>>> b48c8946a473829eb03098d58d72ec3c720cea5a
       cleanup();
       reject(new Error("API script gagal dimuat"));
     };
@@ -103,6 +120,7 @@ function loadJsonp(url) {
   });
 }
 
+<<<<<<< HEAD
 function readCache() {
   try {
     const raw = localStorage.getItem(CACHE_KEY);
@@ -194,6 +212,28 @@ export function useFinanceData() {
         setLoading(false);
         setRefreshing(false);
       }
+=======
+export function useFinanceData() {
+  const [payload, setPayload] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
+  const [lastSync, setLastSync] = useState(null);
+  const [refreshing, setRefreshing] = useState(false);
+
+  const fetchData = useCallback(async (silent = false) => {
+    if (silent) setRefreshing(true); else setLoading(true);
+    try {
+      const json = await loadJsonp(FINANCE_API_URL);
+      if (!json?.success) throw new Error(json?.error || "API mengembalikan error.");
+      setPayload(json);
+      setError("");
+      setLastSync(new Date());
+    } catch (e) {
+      setError(`Live API gagal diakses. ${e.message || "Silakan cek deployment Apps Script."}`);
+    } finally {
+      setLoading(false);
+      setRefreshing(false);
+>>>>>>> b48c8946a473829eb03098d58d72ec3c720cea5a
     }
   }, []);
 
@@ -211,6 +251,13 @@ export function useFinanceData() {
   const botLogRows = useMemo(() => normalizeRows(payload?.botLog), [payload]);
 
   const today = todayKey();
+<<<<<<< HEAD
+=======
+
+  // Ignore future/formula placeholder rows and zero-only rows when deciding the
+  // operational running date. This prevents prefilled future dates such as
+  // 31 Dec from being treated as today's live data.
+>>>>>>> b48c8946a473829eb03098d58d72ec3c720cea5a
   const usableDailyRows = useMemo(() => dailyRows.filter((r) => {
     if (!r.Date || r.Date > today) return false;
     return [r.RGS, r.RD, r.AP, r["Trans DP"], r["Trans WD"], r["Total DP"], r["Total WD"], r["Total TO"]].some((v) => Number(v) !== 0);
@@ -229,6 +276,10 @@ export function useFinanceData() {
 
   const runningStatus = latestDate === today ? "LIVE" : latestDate === yesterday ? "H-1 FALLBACK" : latestDate ? "DATA DELAY" : "NO DATA";
   const runningDate = latestDate || "";
+<<<<<<< HEAD
+=======
+
+>>>>>>> b48c8946a473829eb03098d58d72ec3c720cea5a
   const config = payload?.dashboard || {
     name: "RECONCILIATION CONTROL CENTER",
     year: 2026,
@@ -236,13 +287,40 @@ export function useFinanceData() {
     currency: "IDR",
     includeDanaGantungDaily: false,
   };
+<<<<<<< HEAD
+=======
+
+>>>>>>> b48c8946a473829eb03098d58d72ec3c720cea5a
   const years = useMemo(() => [...new Set(dailyRows.map((r) => Number(r.Year)).filter(Boolean))].sort((a, b) => a - b), [dailyRows]);
   const brands = useMemo(() => [...new Set(dailyRows.map((r) => r.Brand).filter(Boolean))].sort(), [dailyRows]);
 
   return {
+<<<<<<< HEAD
     dailyRows, usableDailyRows, mustangDepoRows, mutasiBankDepoRows, mutasiBankWDRows, mistakeRows, botLogRows,
     latestDate, runningDate, runningStatus, today, years, brands, config,
     loading, refreshing, error, lastSync, cachedAt, apiStatus, retryCount,
     refresh: () => fetchData(true), apiUrl: FINANCE_API_URL,
+=======
+    dailyRows,
+    usableDailyRows,
+    mustangDepoRows,
+    mutasiBankDepoRows,
+    mutasiBankWDRows,
+    mistakeRows,
+    botLogRows,
+    latestDate,
+    runningDate,
+    runningStatus,
+    today,
+    years,
+    brands,
+    config,
+    loading,
+    refreshing,
+    error,
+    lastSync,
+    refresh: () => fetchData(true),
+    apiUrl: FINANCE_API_URL,
+>>>>>>> b48c8946a473829eb03098d58d72ec3c720cea5a
   };
 }
